@@ -1,0 +1,49 @@
+﻿<Window x:Class="WpfKlip.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:wk="clr-namespace:WpfKlip"
+    Title="MainWindow" Style="{StaticResource MainWindowStyle}" >
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Styles.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Mouse.MouseEnter" SourceName="ItemsBox">
+            <BeginStoryboard>
+                <Storyboard>
+                    <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="ItemsBox" Storyboard.TargetProperty="(ScrollViewer.VerticalScrollBarVisibility)">
+                        <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static ScrollBarVisibility.Auto}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="Mouse.MouseLeave" SourceName="ItemsBox">
+            <BeginStoryboard>
+                <Storyboard>
+                    <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="ItemsBox" Storyboard.TargetProperty="(ScrollViewer.VerticalScrollBarVisibility)">
+                        <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static ScrollBarVisibility.Hidden}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="ItemsBox" Style="{StaticResource ItemsBoxStyle}"/>
+        <Button Style="{StaticResource ClearButtonStyle}" Content="Clear" Command="{x:Static wk:Commands.ClearCommand}" x:Name="ClearButton"/>
+        <Button Style="{StaticResource OptionsButtonStyle}" Content="..." Grid.Column="1" Height="40" HorizontalAlignment="Right" Grid.Row="1" Width="65" Command="{x:Static wk:Commands.SettingsCommand}" x:Name="SettingsButton"/>
+        <Button Style="{StaticResource ExitButtonStyle}" Content="Exit" Command="{x:Static wk:Commands.ExitCommand}" x:Name ="ExitButton"/>
+    </Grid>
+</Window>
