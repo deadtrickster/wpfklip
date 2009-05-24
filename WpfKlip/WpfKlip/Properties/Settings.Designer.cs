@@ -25,7 +25,7 @@ namespace WpfKlip.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("24")]
+        [global::System.Configuration.DefaultSettingValueAttribute("26")]
         public int TitleLength {
             get {
                 return ((int)(this["TitleLength"]));
