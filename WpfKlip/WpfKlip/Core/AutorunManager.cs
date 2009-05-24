@@ -1,4 +1,30 @@
-﻿using System;
+﻿#region License block
+/*
+Copyright (c) 2009 Khaprov Ilja (http://dead-trickster.com)
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+*/
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,13 +48,13 @@ namespace WPFKlip.Core
         {
             if (e.PropertyName == "startup")
             {
-                isSystemAutorunDefined = Settings.Default.startup;
+                isUserAutorunDefined = Settings.Default.startup;
             }
         }
 
         static void Default_SettingsLoaded(object sender, System.Configuration.SettingsLoadedEventArgs e)
         {
-            isSystemAutorunDefined = Settings.Default.startup;
+            isUserAutorunDefined = Settings.Default.startup;
         }
 
         public static void InitEvents()
@@ -38,11 +64,11 @@ namespace WPFKlip.Core
         }
 
         static RegistryKey user = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.CreateSubKey | RegistryRights.ReadKey | RegistryRights.SetValue);
-        static RegistryKey system = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
+      //  static RegistryKey system = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
 
         static string entryname = Assembly.GetEntryAssembly().GetName().Name;
         static string executablepath = Assembly.GetEntryAssembly().Location;
-        public static bool isSystemAutorunDefined
+     /*   public static bool isSystemAutorunDefined
         {
             get
             {
@@ -77,13 +103,13 @@ namespace WPFKlip.Core
                     }
                 }
             }
-        }
+        }*/
 
         private static string GetNameOfValue(RegistryKey key, string executablepath)
         {
             foreach (var item in key.GetValueNames())
             {
-                object val = system.GetValue(item, null);
+                object val = user.GetValue(item, null);
                 if (val.ToString() == executablepath)
                 {
                     return item;
