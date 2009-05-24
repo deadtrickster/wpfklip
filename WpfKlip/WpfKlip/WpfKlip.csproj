@@ -32,6 +32,7 @@
     <ManifestCertificateThumbprint>15AAC8073DCDADB5F048F7BCCC0590FB5C407BFD</ManifestCertificateThumbprint>
     <ManifestKeyFile>WpfKlip_TemporaryKey.pfx</ManifestKeyFile>
     <SignManifests>true</SignManifests>
+    <ApplicationIcon>klipper.ico</ApplicationIcon>
     <PublishUrl>ftp://trickster.1gb.ru/http/wpfklip/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -50,7 +51,6 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <ApplicationIcon>klipper.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -184,7 +184,7 @@
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="klipper.ico" />
+    <EmbeddedResource Include="klipper.ico" />
     <Resource Include="klipper.png" />
   </ItemGroup>
   <ItemGroup>
