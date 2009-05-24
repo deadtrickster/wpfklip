@@ -51,7 +51,6 @@ namespace WpfKlip
             InitializeComponent();
             Activated += new EventHandler(MainWindow_Activated);
             MouseDown += new MouseButtonEventHandler(MainWindow_MouseDown);
-            Closed += new EventHandler(MainWindow_Closed);
             CommandBindings.AddRange(Commands.CommandBindings);
         }
 
@@ -60,22 +59,10 @@ namespace WpfKlip
             DWMFrameExtender.FullGlass(this);
         }
 
-        void MainWindow_Closed(object sender, EventArgs e)
-        {
-      //      throw new NotImplementedException();
-        }
-
         void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
                 this.DragMove();
-        }
-
-        internal void SetVisible()
-        {
-            this.Top = System.Windows.Forms.Cursor.Position.Y - 10;
-            this.Left = System.Windows.Forms.Cursor.Position.X - 10;
-            Visibility = Visibility.Visible;
         }
     }
 }
