@@ -46,7 +46,7 @@
     <InstallUrl>http://dead-trickster.com/wpfklip/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>22</ApplicationRevision>
+    <ApplicationRevision>23</ApplicationRevision>
     <ApplicationVersion>0.8.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -184,7 +184,7 @@
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="klipper.ico" />
+    <Content Include="klipper.ico" />
     <Resource Include="klipper.png" />
   </ItemGroup>
   <ItemGroup>

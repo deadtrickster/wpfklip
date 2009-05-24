@@ -87,7 +87,7 @@ namespace WpfKlip.Core
             ch = new ClipboardHelper(f.Handle);
             ch.ClipboardTextGrabbed += ch_ClipboardTextGrabbed;
 
-            gh = new GlobalHotkeyHelper(new WindowInteropHelper(mainWindow).Handle);
+            gh = new GlobalHotkeyHelper(f.Handle);
             gh.GlobalHotkeyFired += new GlobalHotkeyHandler(gh_GlobalHotkeyFired);
 
             gh.RegisterHotKey(666, KeyModifiers.Alt | KeyModifiers.Control | KeyModifiers.Shift, VirtualKeys.VK_Z);
