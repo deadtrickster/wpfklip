@@ -190,5 +190,28 @@ namespace WpfKlip.Properties {
                 this["ItemHotkeyActAs"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection Exceptions {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Exceptions"]));
+            }
+            set {
+                this["Exceptions"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int DefaultExAction {
+            get {
+                return ((int)(this["DefaultExAction"]));
+            }
+            set {
+                this["DefaultExAction"] = value;
+            }
+        }
     }
 }

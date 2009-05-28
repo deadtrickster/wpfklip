@@ -84,6 +84,9 @@ namespace WpfKlip.Core.Win
         [DllImport("User32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr DefWindowProc(IntPtr hWnd, uint message, IntPtr wParam, IntPtr lParam);
 
+        [DllImport("User32.dll")]
+        public static extern int DestroyIcon(IntPtr hIcon);
+
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool DestroyWindow(IntPtr hwnd);
 

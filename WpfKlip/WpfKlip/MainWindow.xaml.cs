@@ -64,5 +64,17 @@ namespace WpfKlip
             if (e.LeftButton == MouseButtonState.Pressed)
                 this.DragMove();
         }
+
+        public void SetVisible()
+        {
+            Top = System.Windows.Forms.Cursor.Position.Y - 10;
+            Left = System.Windows.Forms.Cursor.Position.X - 10;
+            Visibility = Visibility.Visible;
+        }
+
+        private void Label_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CapturedItemsListController.Instance.RestoreClipboardChain();
+        }
     }
 }

@@ -38,6 +38,7 @@ using WpfKlip.Core.Win.Structs;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Windows.Interop;
+using System.Diagnostics;
 
 namespace WpfKlip.Core
 {
@@ -110,25 +111,66 @@ namespace WpfKlip.Core
 
         void ch_ClipboardTextGrabbed(string text)
         {
-            var ItemsBox = mainWindow.ItemsBox;
-            for (int i = 0; i < ItemsBox.Items.Count; i++)
+
+            if (CheckForException())
             {
-                object item = ItemsBox.Items[i];
-                if (((item as ListBoxItem).Tag as String) == text)
+
+                var ItemsBox = mainWindow.ItemsBox;
+                for (int i = 0; i < ItemsBox.Items.Count; i++)
                 {
-                    ItemsBox.Items.RemoveAt(i);
-                    ItemsBox.Items.Insert(0, item);
-                    return;
+                    object item = ItemsBox.Items[i];
+                    if (((item as ListBoxItem).Tag as String) == text)
+                    {
+                        ItemsBox.Items.RemoveAt(i);
+                        ItemsBox.Items.Insert(0, item);
+                        return;
+                    }
+                }
+
+                ListBoxItem n = new ListBoxItem();
+                n.AddHandler(Mouse.MouseDownEvent, new MouseButtonEventHandler(HandleClick), true);
+                n.Content = CreatePreviewTitleString(text);
+                n.Tag = text;
+                n.MinHeight = 25;
+                n.ToolTip = CreatePreviewBallonString(text);
+                ItemsBox.Items.Insert(0, n);
+            }
+        }
+
+        private bool CheckForException()
+        {
+            if (activeWindow == IntPtr.Zero)
+                return true;
+            else
+            {
+                IntPtr id;
+                User32.GetWindowThreadProcessId(activeWindow, out id);
+                string path = Process.GetProcessById(id.ToInt32()).MainModule.FileName;
+
+                for (int i = 0; i < Settings.Default.Exceptions.Count; i++)
+                {
+                    if (Settings.Default.Exceptions[i].StartsWith(path))
+                    {
+                        if (Settings.Default.DefaultExAction == 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
                 }
             }
 
-            ListBoxItem n = new ListBoxItem();
-            n.AddHandler(Mouse.MouseDownEvent, new MouseButtonEventHandler(HandleClick), true);
-            n.Content = CreatePreviewTitleString(text);
-            n.Tag = text;
-            n.MinHeight = 25;
-            n.ToolTip = CreatePreviewBallonString(text);
-            ItemsBox.Items.Insert(0, n);
+            if (Settings.Default.DefaultExAction == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         void n_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -157,21 +199,13 @@ namespace WpfKlip.Core
             switch (mainWindow.Visibility)
             {
                 case Visibility.Hidden:
-                    SetVisible();
+                    mainWindow.SetVisible();
                     break;
                 case Visibility.Visible:
                     mainWindow.Visibility = Visibility.Hidden;
                     break;
             }
         }
-
-        public void SetVisible()
-        {
-            mainWindow.Top = System.Windows.Forms.Cursor.Position.Y - 10;
-            mainWindow.Left = System.Windows.Forms.Cursor.Position.X - 10;
-            mainWindow.Visibility = Visibility.Visible;
-        }
-
 
         internal void ClearList()
         {
@@ -422,6 +456,11 @@ namespace WpfKlip.Core
         {
             f.Close();
             f.Dispose();
+        }
+
+        internal void RestoreClipboardChain()
+        {
+            ch.RestoreClipboardChain();
         }
     }
 }

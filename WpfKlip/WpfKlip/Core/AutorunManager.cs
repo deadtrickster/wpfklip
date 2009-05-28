@@ -37,6 +37,10 @@ using System.Security.AccessControl;
 
 namespace WPFKlip.Core
 {
+    /// <summary>
+    /// NOTE: if application will be installed on development machine value of this valuename pair will be changed to 
+    /// path to dev bin.
+    /// </summary>
     public class RegistryAutorunManager
     {
         static RegistryAutorunManager()
@@ -64,46 +68,9 @@ namespace WPFKlip.Core
         }
 
         static RegistryKey user = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.CreateSubKey | RegistryRights.ReadKey | RegistryRights.SetValue);
-      //  static RegistryKey system = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
 
         static string entryname = Assembly.GetEntryAssembly().GetName().Name;
         static string executablepath = Assembly.GetEntryAssembly().Location;
-     /*   public static bool isSystemAutorunDefined
-        {
-            get
-            {
-                foreach (var item in system.GetValueNames())
-                {
-                    object val = system.GetValue(item, null);
-                    if (val.ToString() == executablepath)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-            set
-            {
-
-                string alreadyname = GetNameOfValue(system, executablepath);
-                if (value)
-                {
-                    if (alreadyname == string.Empty)
-                    {
-                        system.SetValue(entryname, executablepath);
-                        return;
-                    }
-                }
-                else
-                {
-                    if (alreadyname != string.Empty)
-                    {
-                        system.DeleteValue(alreadyname);
-                    }
-                }
-            }
-        }*/
 
         private static string GetNameOfValue(RegistryKey key, string executablepath)
         {
