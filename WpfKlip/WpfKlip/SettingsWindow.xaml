@@ -1,10 +1,10 @@
 ﻿<Window x:Class="WpfKlip.SettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Optional" Height="304" Width="450" WindowStyle="ToolWindow" ResizeMode="NoResize" ShowInTaskbar="False" Icon="/WPFKlip;component/klipper.ico" Topmost="True" xmlns:WPFKlip_Properties="clr-namespace:WpfKlip.Properties">
+        Title="Settings" Height="304" Width="450" WindowStyle="ToolWindow" ResizeMode="NoResize" ShowInTaskbar="False" Icon="/WpfKlip;component/klipper.png" Topmost="True" xmlns:WpfKlip_Properties="clr-namespace:WpfKlip.Properties" xmlns:my="clr-namespace:WpfKlip">
     <Grid>
         <TabControl  x:Name="tabControl1" TabStripPlacement="Left">
-            <TabItem x:Name="SettingsTabItem" DataContext="{x:Static WPFKlip_Properties:Settings.Default}">
+            <TabItem x:Name="SettingsTabItem" DataContext="{x:Static WpfKlip_Properties:Settings.Default}">
                 <TabItem.Header>
                     <Label Height="27" Content="Settings" />
                 </TabItem.Header>
@@ -65,6 +65,12 @@
                     </ComboBox>
                     <Label Grid.ColumnSpan="2" Margin="42,10,77,4" x:Name="label14" Grid.Column="1" Content="Item hotkey act as"/>
                 </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                  <Label Height="27" Content="Exceptions" />
+                </TabItem.Header>
+                <my:ExceptionsList  x:Name="exceptionsList1" />
             </TabItem>
             <TabItem x:Name="AboutTabItem">
                 <TabItem.Header>

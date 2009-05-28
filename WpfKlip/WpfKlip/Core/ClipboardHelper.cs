@@ -134,5 +134,11 @@ namespace WpfKlip.Core
                 System.Windows.Forms.MessageBox.Show("Unable to retrive text from clipboard: COM exception :-(.");
             }
         }
+
+        internal void RestoreClipboardChain()
+        {
+            User32.ChangeClipboardChain(this.Handle, hwndNextViewer);
+            RegisterClipboardListener();
+        }
     }
 }

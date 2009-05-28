@@ -57,8 +57,7 @@ namespace WpfKlip
             this.IsSingleInstance = true;
         }
 
-
-
+        // called on first run.
         protected override bool OnStartup(Microsoft.VisualBasic.ApplicationServices.StartupEventArgs e)
         {
             app = new App();
@@ -71,6 +70,7 @@ namespace WpfKlip
             return false;
         }
 
+        // called on subsequent runs
         protected override void OnStartupNextInstance(StartupNextInstanceEventArgs eventArgs)
         {
             base.OnStartupNextInstance(eventArgs);

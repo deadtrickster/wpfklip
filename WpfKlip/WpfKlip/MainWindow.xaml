@@ -43,7 +43,15 @@
         </Grid.ColumnDefinitions>
         <ListBox x:Name="ItemsBox" Style="{StaticResource ItemsBoxStyle}"/>
         <Button Style="{StaticResource ClearButtonStyle}" Content="Clear" Command="{x:Static wk:Commands.ClearCommand}" x:Name="ClearButton"/>
-        <Button Style="{StaticResource OptionsButtonStyle}" Content="..." Grid.Column="1" Height="40" Grid.Row="1"  Command="{x:Static wk:Commands.SettingsCommand}" x:Name="SettingsButton"/>
+        <Button Style="{StaticResource OptionsButtonStyle}" Content="..." Grid.Column="1" Height="40" Grid.Row="1"  Command="{x:Static wk:Commands.SettingsCommand}" x:Name="SettingsButton">
+            <Button.ContextMenu>
+                <ContextMenu >
+                    <ContextMenu.Items>
+                        <Label Content="Reset Clipboard Chain" MouseDown="Label_MouseDown"/>
+                    </ContextMenu.Items>
+                </ContextMenu>
+            </Button.ContextMenu>
+        </Button>
         <Button Style="{StaticResource ExitButtonStyle}" Content="Exit" Command="{x:Static wk:Commands.ExitCommand}" x:Name ="ExitButton"/>
     </Grid>
 </Window>
