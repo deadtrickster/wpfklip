@@ -68,9 +68,9 @@
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                  <Label Height="27" Content="Exceptions" />
+                  <Label Height="27" Content="Exclusions" />
                 </TabItem.Header>
-                <my:ExceptionsList  x:Name="exceptionsList1" />
+                <my:ExclusionsList  x:Name="exclusionsList1" />
             </TabItem>
             <TabItem x:Name="AboutTabItem">
                 <TabItem.Header>
