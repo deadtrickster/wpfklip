@@ -2,50 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Diagnostics;
-using WpfKlip.Properties;
 using WpfKlip.Core.Win;
-using System.ComponentModel;
+using WpfKlip.Properties;
+using System.Diagnostics;
+using System.Collections;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Windows.Media.Imaging;
 using System.IO;
 
-namespace WpfKlip
+namespace WpfKlip.Core
 {
-    /// <summary>
-    /// Interaction logic for ExceptionsList.xaml
-    /// TODO: cleanup
-    /// </summary>
-    public partial class ExceptionsList : UserControl
+    class ExclusionslistController
     {
-        public ExceptionsList()
+        public static IEnumerable ItemsSource
         {
-            InitializeComponent();
-            DefaultActionSelector.SelectedIndex = Settings.Default.DefaultExAction;
-            DefaultActionSelector.SelectionChanged +=DefaultActionSelector_SelectedIndexChanged;
-            refreshProcessList();
+            get {
+                return CombineItems(Process.GetProcesses(), Settings.Default.Exceptions);
+            }
+
         }
 
-        bool refreshing_list = false;
-        private void refreshProcessList()
-        {
-            refreshing_list = true;
-            Actionslist.ItemsSource = CombineItems(Process.GetProcesses(), Settings.Default.Exceptions);
-            refreshing_list = false;
-        }
-
-
-        // store processName 
-        // if image running then replace with DistilledProcess From It
-        private System.Collections.IEnumerable CombineItems(Process[] processes, System.Collections.Specialized.StringCollection stringCollection)
+        static System.Collections.IEnumerable CombineItems(Process[] processes, System.Collections.Specialized.StringCollection stringCollection)
         {
             List<DistilledProcess> ret = new List<DistilledProcess>(processes.Length);
 
@@ -54,7 +32,7 @@ namespace WpfKlip
                 Settings.Default.Exceptions = new StringCollection();
             for (int i = 0; i < Settings.Default.Exceptions.Count; i++)
             {
-                string[] Exceptions = Settings.Default.Exceptions[i].Split(new string[]{"%%%"}, StringSplitOptions.None);
+                string[] Exceptions = Settings.Default.Exceptions[i].Split(new string[] { "%%%" }, StringSplitOptions.None);
                 string path = Exceptions[0];
                 string name = Exceptions[1];
                 ret.Add(DistilledProcess.FromRule(path, name));
@@ -94,54 +72,72 @@ namespace WpfKlip
                 catch (Win32Exception)
                 {
                 }
+                catch (InvalidOperationException)
+                {
+
+                }
             }
 
             return ret;
         }
 
-        private void RefreshProcessListButton_Click(object sender, RoutedEventArgs e)
+        public static bool Accept(IntPtr fromWindow)
         {
-            refreshProcessList();
-        }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!refreshing_list)
+            if (fromWindow == IntPtr.Zero)
+                return true;
+            else
             {
-                DistilledProcess dp = (sender as Control).Tag as DistilledProcess;
-                if (dp.Action != Settings.Default.DefaultExAction)
+                IntPtr id;
+                User32.GetWindowThreadProcessId(fromWindow, out id);
+                string path = Process.GetProcessById(id.ToInt32()).MainModule.FileName;
+
+                for (int i = 0; i < Settings.Default.Exceptions.Count; i++)
                 {
-                    if (!Settings.Default.Exceptions.Contains(dp.ExecutablePath + "%%%" + dp.ProcessName))
+                    if (Settings.Default.Exceptions[i].StartsWith(path))
                     {
-                        Settings.Default.Exceptions.Add(dp.ExecutablePath + "%%%" + dp.ProcessName);
-                        Settings.Default.Save();
+                        if (Settings.Default.DefaultExAction == 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
                     }
                 }
-                else
-                {
-                    Settings.Default.Exceptions.Remove(dp.ExecutablePath + "%%%" + dp.ProcessName);
-                    Settings.Default.Save();
-                }
+            }
+
+
+            if (Settings.Default.DefaultExAction == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
-        private void DefaultActionSelector_SelectedIndexChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Settings.Default.DefaultExAction = (sender as ComboBox).SelectedIndex;
-            Settings.Default.Save();
-            refreshProcessList();
-        }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        internal static void Change(object tag)
         {
-            Settings.Default.Exceptions.Clear();
-            Settings.Default.Save();
-
-            refreshProcessList();
+            DistilledProcess dp = tag as DistilledProcess;
+            if (dp.Action != Settings.Default.DefaultExAction)
+            {
+                if (!Settings.Default.Exceptions.Contains(dp.ExecutablePath + "%%%" + dp.ProcessName))
+                {
+                    Settings.Default.Exceptions.Add(dp.ExecutablePath + "%%%" + dp.ProcessName);
+                    Settings.Default.Save();
+                }
+            }
+            else
+            {
+                Settings.Default.Exceptions.Remove(dp.ExecutablePath + "%%%" + dp.ProcessName);
+                Settings.Default.Save();
+            }
         }
     }
-
-
 
     class DistilledProcess
     {
@@ -220,14 +216,14 @@ namespace WpfKlip
 
         static string ConstructProcessInfo(Process process)
         {
-             /*
-                        StringBuilder sb = new StringBuilder();
-                        if (process.MainWindowTitle.Length != 0)
-                        {
-                            sb.AppendLine("Main Window Title: " + process.MainWindowTitle);
-                        }
-                        sb.Append("Executable Path: " + process.MainModule.FileName);
-                        return sb.ToString();*/
+            /*
+                       StringBuilder sb = new StringBuilder();
+                       if (process.MainWindowTitle.Length != 0)
+                       {
+                           sb.AppendLine("Main Window Title: " + process.MainWindowTitle);
+                       }
+                       sb.Append("Executable Path: " + process.MainModule.FileName);
+                       return sb.ToString();*/
             return process.MainModule.FileName;
         }
 
@@ -235,17 +231,6 @@ namespace WpfKlip
         {
             name = ConstructProcessLabel(process.MainModule.FileVersionInfo.FileDescription, process.ProcessName);
         }
-    }
-
-
-    class DistilledProcessFromRule
-    {
-
-    }
-
-    class DistilledPrcoessFromProcess
-    {
-
     }
 
     /// <summary>

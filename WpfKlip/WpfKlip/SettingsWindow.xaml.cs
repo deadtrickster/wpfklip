@@ -96,7 +96,7 @@ namespace WpfKlip
             var scren = System.Windows.Forms.Screen.FromHandle(new WindowInteropHelper(Singleton).Handle);
             var wa = scren.WorkingArea;
             var mw = Application.Current.MainWindow;
-            if ((wa.Left + wa.Width) < (mw.Left + 450 + 15))
+            if ((wa.Left + wa.Width) < (mw.Left + 450 + 235))
             {
                 Singleton.Left = mw.Left - 450 - 15;
             }

@@ -72,6 +72,7 @@ namespace WpfKlip.Core
         }
 
         IntPtr activeWindow;
+        IntPtr mainWindowPtr;
         System.Windows.Forms.Form f;
         ShellHook sh;
         ClipboardHelper ch;
@@ -81,6 +82,8 @@ namespace WpfKlip.Core
         private CapturedItemsListController(MainWindow mainWindow)
         {
             this.mainWindow = mainWindow;
+            this.mainWindowPtr = new System.Windows.Interop.WindowInteropHelper(mainWindow).Handle;
+
             f = new System.Windows.Forms.Form();
             sh = new ShellHook(f.Handle);
             sh.WindowActivated += sh_WindowActivated;
@@ -106,13 +109,16 @@ namespace WpfKlip.Core
 
         void sh_WindowActivated(ShellHook sender, IntPtr hWnd)
         {
-            activeWindow = hWnd;
+            if (hWnd != mainWindowPtr)
+            {
+                activeWindow = hWnd;
+            }
         }
 
         void ch_ClipboardTextGrabbed(string text)
         {
 
-            if (CheckForException())
+            if (ExclusionslistController.Accept(activeWindow))
             {
 
                 var ItemsBox = mainWindow.ItemsBox;
@@ -134,42 +140,14 @@ namespace WpfKlip.Core
                 n.MinHeight = 25;
                 n.ToolTip = CreatePreviewBallonString(text);
                 ItemsBox.Items.Insert(0, n);
-            }
-        }
 
-        private bool CheckForException()
-        {
-            if (activeWindow == IntPtr.Zero)
-                return true;
-            else
-            {
-                IntPtr id;
-                User32.GetWindowThreadProcessId(activeWindow, out id);
-                string path = Process.GetProcessById(id.ToInt32()).MainModule.FileName;
 
-                for (int i = 0; i < Settings.Default.Exceptions.Count; i++)
+                Console.WriteLine("\r\n\r\n");
+
+                for (int i = 0; i < ItemsBox.Items.Count; i++)
                 {
-                    if (Settings.Default.Exceptions[i].StartsWith(path))
-                    {
-                        if (Settings.Default.DefaultExAction == 0)
-                        {
-                            return false;
-                        }
-                        else
-                        {
-                            return true;
-                        }
-                    }
+                    Console.WriteLine("{0}:{1}", i, (ItemsBox.Items[i] as ListBoxItem).Tag);
                 }
-            }
-
-            if (Settings.Default.DefaultExAction == 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
 
@@ -376,7 +354,7 @@ namespace WpfKlip.Core
                     press((int)System.Windows.Forms.Keys.ControlKey);
                     press((int)System.Windows.Forms.Keys.V);
                     release((int)System.Windows.Forms.Keys.V);
-                    User32.SendMessage(activeWindow, (int)WindowMessages.WM_CHAR, CtrlV, 0);
+                   // User32.SendMessage(activeWindow, (int)WindowMessages.WM_CHAR, CtrlV, 0);
                     release((int)System.Windows.Forms.Keys.ControlKey);
                     User32.SetFocus(activeWindow);
                     break;
