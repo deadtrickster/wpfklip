@@ -48,8 +48,9 @@ namespace WpfKlip
             #endregion
 
             this.files = files;
-            Thread thr = new Thread(PreapreFilesInfo);
-            thr.Start();
+           PreapreFilesInfo();// Thread thr = new Thread(PreapreFilesInfo);
+
+            //thr.Start();
             if (instance != null)
             {
                 instance.IsOpen = false;
@@ -134,13 +135,13 @@ namespace WpfKlip
             Fileslist.Visibility = Visibility.Visible;
         }
 
-        private static BitmapSource getThumb(string path)
+        private static ImageSource getThumb(string path)
         {
             System.Drawing.Bitmap image = ShellThumbnailsService.GetThumbOrIcon(path);
 
             if (image == null)
             {
-                return ((BitmapImage)new FileToIconConverter().GetImage(path, 128));
+                return ((ImageSource)new FileToIconConverter().GetImage(path, 128));
             }
 
             return image.ToWpfBitmap();
