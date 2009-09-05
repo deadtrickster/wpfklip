@@ -90,7 +90,6 @@ namespace WpfKlip.Core
                 return true;
             else
             {
-                IntPtr id;
                 string path = CapturedItemsListController.Instance.ActiveProcess.MainModule.FileName;
 
                 for (int i = 0; i < Settings.Default.Exceptions.Count; i++)

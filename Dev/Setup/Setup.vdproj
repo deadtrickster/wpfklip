@@ -21,6 +21,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_2DCDB037DD9049C18BDB18A8E15294D3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5123602BD47A47B9AE6D9E8FCBA17C77"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -39,14 +45,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_95369DE23B84468CA8B5361EA36F2CC9"
+        "MsmKey" = "8:_E98ACF3D1C1A468DA232A2EDA42F0BF4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_E98ACF3D1C1A468DA232A2EDA42F0BF4"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_2DCDB037DD9049C18BDB18A8E15294D3"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -310,14 +316,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:WpfKlip"
-        "ProductCode" = "8:{C3D15362-3565-42DA-8118-68D8E9BC8C56}"
-        "PackageCode" = "8:{B4528EC0-5802-4709-B3F0-A1900854B476}"
+        "ProductCode" = "8:{27851309-9240-498E-AECC-BBA0F2C051A3}"
+        "PackageCode" = "8:{E3EB1538-AC11-425B-967A-2203E5548F01}"
         "UpgradeCode" = "8:{4B067FF8-23BD-4962-914C-9CB29130CEA7}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.8.0631"
+        "ProductVersion" = "8:0.8.0632"
         "Manufacturer" = "8:dead-trickster.com"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://dead-trickster.com"
@@ -438,7 +444,7 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_95369DE23B84468CA8B5361EA36F2CC9"
+            "Target" = "8:_2DCDB037DD9049C18BDB18A8E15294D3"
             "Folder" = "8:_AFED6ED4B09D42F1AD1369D7DBAC2FAA"
             "WorkingFolder" = "8:_67BE8D7150C540C7BA379EC37E6712A5"
             "Icon" = "8:_E98ACF3D1C1A468DA232A2EDA42F0BF4"
@@ -452,7 +458,7 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_95369DE23B84468CA8B5361EA36F2CC9"
+            "Target" = "8:_2DCDB037DD9049C18BDB18A8E15294D3"
             "Folder" = "8:_D07A80B2B1254FBD84F6ADF9F377C2D7"
             "WorkingFolder" = "8:_67BE8D7150C540C7BA379EC37E6712A5"
             "Icon" = "8:_E98ACF3D1C1A468DA232A2EDA42F0BF4"
@@ -951,63 +957,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6B429E665D9E4F318F27EE403FA08CA9"
-            {
-            "SourcePath" = "8:"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_67BE8D7150C540C7BA379EC37E6712A5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Symbols"
-            "OutputProjectGuid" = "8:{CD7A4F3C-FD1E-4D37-BC6D-5A803107B835}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6E59D51A7CFE411A99BDA5D05C14367D"
-            {
-            "SourcePath" = "8:"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_67BE8D7150C540C7BA379EC37E6712A5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:XmlSerializer"
-            "OutputProjectGuid" = "8:{CD7A4F3C-FD1E-4D37-BC6D-5A803107B835}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_95369DE23B84468CA8B5361EA36F2CC9"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_2DCDB037DD9049C18BDB18A8E15294D3"
             {
             "SourcePath" = "8:..\\WpfKlip\\obj\\Debug\\WpfKlip.exe"
             "TargetName" = "8:"
@@ -1029,35 +979,7 @@
             "ProjectOutputGroupRegister" = "3:1"
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{CD7A4F3C-FD1E-4D37-BC6D-5A803107B835}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E7BC56A0FA224D79BE1156DAC03DBB01"
-            {
-            "SourcePath" = "8:"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_67BE8D7150C540C7BA379EC37E6712A5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:LocalizedResourceDlls"
-            "OutputProjectGuid" = "8:{CD7A4F3C-FD1E-4D37-BC6D-5A803107B835}"
+            "OutputProjectGuid" = "8:{7EF9CC15-2C78-4F26-817E-5F07CBA7A6E4}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

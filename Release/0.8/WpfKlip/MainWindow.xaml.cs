@@ -102,7 +102,7 @@ namespace WpfKlip
                     ni.DoubleClick +=
                         delegate(object sender, EventArgs args)
                         {
-                            SetVisible();
+                            ToogleVisibility();
                         };
                 }
 
@@ -122,7 +122,7 @@ namespace WpfKlip
 
             var mainWindowPtr = new WindowInteropHelper(this).Handle;
 
-            int style = User32.GetWindowLong(mainWindowPtr, WpfKlip.Core.Win.Enums.GWLIndex.GWL_STYLE);
+            int style = User32.GetWindowLongPtr(mainWindowPtr, (int)WpfKlip.Core.Win.Enums.GWLIndex.GWL_STYLE).ToInt32();
 
             style = style & ~(int)WpfKlip.Core.Win.Enums.WindowStyle.WS_MINIMIZEBOX;
             style = style & ~(int)WpfKlip.Core.Win.Enums.WindowStyle.WS_MAXIMIZEBOX;
@@ -143,6 +143,20 @@ namespace WpfKlip
         {
             if (e.LeftButton == MouseButtonState.Pressed)
                 this.DragMove();
+        }
+
+        public void ToogleVisibility()
+        {
+            switch (Visibility)
+            {
+                case Visibility.Hidden:
+                    SetVisible();
+                    break;
+                case Visibility.Visible:
+                    Visibility = Visibility.Hidden;
+                    SettingsWindow.Singleton.Visibility = Visibility.Hidden;
+                    break;
+            }
         }
 
         public void SetVisible()
@@ -166,6 +180,7 @@ namespace WpfKlip
 
             this.Top = top;
             this.Left = left;
+            ItemsBox.Focus();
             Visibility = Visibility.Visible;
         }
 

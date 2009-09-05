@@ -133,7 +133,7 @@ namespace WpfKlip.Core.Win
                     {
                         target.WritePixels(outRect, bits, stride, 0);
                     }
-                    catch (Exception e)
+                    catch
                     {
                         System.Diagnostics.Debugger.Break();
                     }
@@ -149,7 +149,7 @@ namespace WpfKlip.Core.Win
                 {
                     target.WritePixels(outRect, bits, stride, 0);
                 }
-                catch (Exception e)
+                catch
                 {
                     System.Diagnostics.Debugger.Break();
                 }

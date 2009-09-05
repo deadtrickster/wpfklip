@@ -12,6 +12,7 @@ using WpfKlip.Core.Win;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Security.Cryptography;
 
 namespace WpfKlip.Core
 {
@@ -102,9 +103,6 @@ namespace WpfKlip.Core
                 ItemClicked(this, click);
         }
 
-        
-
-
         public void DoMouseCommand(int command)
         {
             switch (command)
@@ -116,7 +114,6 @@ namespace WpfKlip.Core
 
                     User32.SetForegroundWindow(controller.ActiveWindow);
                     Copy();
-                    const int CtrlV = 22;  // ASCII for Ctrl+V.
                     press((int)System.Windows.Forms.Keys.ControlKey);
                     press((int)System.Windows.Forms.Keys.V);
                     release((int)System.Windows.Forms.Keys.V);
@@ -177,7 +174,6 @@ namespace WpfKlip.Core
             }
         }
 
-
         public System.Windows.Controls.Control SettingsPanel
         {
             get { return null; }
@@ -208,6 +204,7 @@ namespace WpfKlip.Core
         #region new item processing
         private string CreatePreviewTitleString(string str)
         {
+            str = str.Trim();
             return CreateTitleText(str, str.Length);
         }
 
@@ -430,10 +427,16 @@ namespace WpfKlip.Core
     {
         System.Windows.Media.Imaging.BitmapSource image;
         static int counter = 1;
-        public ImageLBI(System.Windows.Media.Imaging.BitmapSource image)
+        public ImageLBI(System.Drawing.Bitmap bitmap)
             :base(CapturedItemsListController.Instance)
         {
+
+            System.Windows.Media.Imaging.BitmapSource image = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+              bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty,
+              BitmapSizeOptions.FromEmptyOptions());
+
             this.image = image;
+            Tag = new ImageHash(bitmap);
 
             this.MinHeight = 25;
             
@@ -469,7 +472,7 @@ namespace WpfKlip.Core
 
         public override void CopyImpl()
         {
-            System.Windows.Clipboard.SetImage((BitmapSource)image);
+            System.Windows.Forms.Clipboard.SetImage((Tag as ImageHash).Image);
         }
     }
 }
