@@ -134,15 +134,16 @@ namespace WpfKlip
             Fileslist.Visibility = Visibility.Visible;
         }
 
-        private static System.Drawing.Bitmap getThumb(string path)
+        private static BitmapSource getThumb(string path)
         {
             System.Drawing.Bitmap image = ShellThumbnailsService.GetThumbOrIcon(path);
-           /* if (image == null)
-            {
-                image =   ((BitmapImage)new FileToIconConverter().GetImage(path, 128));
-            }*/
 
-            return image;
+            if (image == null)
+            {
+                return ((BitmapImage)new FileToIconConverter().GetImage(path, 128));
+            }
+
+            return image.ToWpfBitmap();
         }
 
         public class _FileInfo
@@ -152,7 +153,7 @@ namespace WpfKlip
                 Name = System.IO.Path.GetFileName(path);
                 Path = path;
 
-                Thumb = getThumb(path).ToWpfBitmap();
+                Thumb = getThumb(path);
             }
 
             public string Name
