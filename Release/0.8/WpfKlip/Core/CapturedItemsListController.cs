@@ -115,8 +115,8 @@ namespace WpfKlip.Core
         void ch_ClipboardGrabbed(System.Windows.Forms.IDataObject dataObject)
         {
             IntPtr id;
-             User32.GetWindowThreadProcessId(activeWindow, out id);
-             activeProcess = Process.GetProcessById(id.ToInt32());
+            User32.GetWindowThreadProcessId(activeWindow, out id);
+            activeProcess = Process.GetProcessById(id.ToInt32());
 
             if (ExclusionslistController.Accept(activeWindow))
             {
@@ -163,21 +163,24 @@ namespace WpfKlip.Core
                 }
                 else if (System.Windows.Clipboard.ContainsImage())
                 {
-                    System.Windows.Media.Imaging.BitmapSource image = GetBitmapSourceFromClipboard();
+
+                    System.Windows.Forms.IDataObject clipboardData = System.Windows.Forms.Clipboard.GetDataObject();
+                    System.Drawing.Bitmap bitmap = (System.Drawing.Bitmap)clipboardData.GetData(
+                       System.Windows.Forms.DataFormats.Bitmap);
 
                     if (CheckDuplicates(ItemsBox, (obj) =>
                     {
-                        System.Windows.Media.Imaging.BitmapSource image1 = obj as System.Windows.Media.Imaging.BitmapSource;
-                        if (image1 == null)
+                        var taghash = obj as ImageHash;
+                        if (taghash == null)
                         {
                             return false;
                         }
 
-                        else return image1 == image;
+                        else return ImageHash.Compare(taghash, new ImageHash(bitmap)) == ImageHash.CompareResult.ciCompareOk;
                     }))
                         return;
 
-                    n = new ImageLBI(image);
+                    n = new ImageLBI(bitmap);
                 }
 
                 if (n != null)
@@ -193,18 +196,6 @@ namespace WpfKlip.Core
                      Console.WriteLine("{0}:{1}", i, (ItemsBox.Items[i] as ListBoxItem).Tag);
                  }*/
             }
-        }
-
-        private static BitmapSource GetBitmapSourceFromClipboard()
-        {
-            System.Windows.Forms.IDataObject clipboardData =
-               System.Windows.Forms.Clipboard.GetDataObject();
-            System.Drawing.Bitmap bitmap =
-               (System.Drawing.Bitmap)clipboardData.GetData(
-               System.Windows.Forms.DataFormats.Bitmap);
-            return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-              bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty,
-              BitmapSizeOptions.FromEmptyOptions());
         }
 
         private static bool CheckDuplicates(ListBox ItemsBox, LambdaComparer comparer)
@@ -243,7 +234,7 @@ namespace WpfKlip.Core
         {
             if (id == 666)
             {
-                ToogleVisibility();
+                mainWindow.ToogleVisibility();
                 return;
             }
 
@@ -254,20 +245,6 @@ namespace WpfKlip.Core
                 (mainWindow.ItemsBox.Items[itemindex] as DataEnabledListBoxItem).DoMouseCommand(MouseCommand.GetCommandForClick((ClickType)Settings.Default.ItemHotkeyActAs));
             }
 
-        }
-
-        private void ToogleVisibility()
-        {
-            switch (mainWindow.Visibility)
-            {
-                case Visibility.Hidden:
-                    mainWindow.SetVisible();
-                    break;
-                case Visibility.Visible:
-                    mainWindow.Visibility = Visibility.Hidden;
-                    SettingsWindow.Singleton.Visibility = Visibility.Hidden;
-                    break;
-            }
         }
 
         internal void ClearList()

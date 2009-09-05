@@ -119,7 +119,7 @@ namespace WpfKlip
 
             foreach (var file_path in files)
             {
-                if (File.Exists(file_path))
+                if (File.Exists(file_path) || Directory.Exists(file_path))
                 {
                     ret.Add(new _FileInfo(file_path));
                 }
