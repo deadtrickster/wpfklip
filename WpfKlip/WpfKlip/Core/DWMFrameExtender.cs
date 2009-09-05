@@ -41,39 +41,44 @@ namespace WpfKlip.Core
     {
         public static void FullGlass(Window w)
         {
-            var mainWindowPtr = new WindowInteropHelper(w).Handle;
-            try
+            if (Environment.OSVersion.Version.Major > 5)
             {
-                HwndSource mainWindowSrc = HwndSource.FromHwnd(mainWindowPtr);
-                mainWindowSrc.CompositionTarget.BackgroundColor = Color.FromArgb(0, 0, 0, 0);
-
-                // Get System Dpi
-                System.Drawing.Graphics desktop = System.Drawing.Graphics.FromHwnd(mainWindowPtr);
-                float DesktopDpiX = desktop.DpiX;
-                float DesktopDpiY = desktop.DpiY;
-
-                // Set Margins
-                MARGINS margins = new MARGINS();
-
-                // Extend glass frame into client area
-                // Note that the default desktop Dpi is 96dpi. The  margins are
-                // adjusted for the system Dpi.
-                margins.cxLeftWidth = Convert.ToInt32(1000 * (DesktopDpiX / 96));
-                margins.cxRightWidth = Convert.ToInt32(1000 * (DesktopDpiX / 96));
-                margins.cyTopHeight = Convert.ToInt32(1000 * (DesktopDpiX / 96));
-                margins.cyBottomHeight = Convert.ToInt32(1000 * (DesktopDpiX / 96));
-
-                int hr = DwmApi.DwmExtendFrameIntoClientArea(mainWindowSrc.Handle, ref margins);
-                //
-                if (hr < 0)
+                var mainWindowPtr = new WindowInteropHelper(w).Handle;
+                try
                 {
-                    //DwmExtendFrameIntoClientArea Failed
+                    System.Windows.Application.Current.MainWindow.Background = new SolidColorBrush(Colors.Transparent);
+             
+                    HwndSource mainWindowSrc = HwndSource.FromHwnd(mainWindowPtr);
+                    mainWindowSrc.CompositionTarget.BackgroundColor = Color.FromArgb(0, 0, 0, 0);
+
+                    // Get System Dpi
+                    System.Drawing.Graphics desktop = System.Drawing.Graphics.FromHwnd(mainWindowPtr);
+                    float DesktopDpiX = desktop.DpiX;
+                    float DesktopDpiY = desktop.DpiY;
+
+                    // Set Margins
+                    MARGINS margins = new MARGINS();
+
+                    // Extend glass frame into client area
+                    // Note that the default desktop Dpi is 96dpi. The  margins are
+                    // adjusted for the system Dpi.
+                    margins.cxLeftWidth = Convert.ToInt32(1000 * (DesktopDpiX / 96));
+                    margins.cxRightWidth = Convert.ToInt32(1000 * (DesktopDpiX / 96));
+                    margins.cyTopHeight = Convert.ToInt32(1000 * (DesktopDpiX / 96));
+                    margins.cyBottomHeight = Convert.ToInt32(1000 * (DesktopDpiX / 96));
+
+                    int hr = DwmApi.DwmExtendFrameIntoClientArea(mainWindowSrc.Handle, ref margins);
+                    //
+                    if (hr < 0)
+                    {
+                        //DwmExtendFrameIntoClientArea Failed
+                    }
                 }
-            }
-            // If not Vista, paint background white.
-            catch (DllNotFoundException)
-            {
-                System.Windows.Application.Current.MainWindow.Background = SystemColors.ControlBrush;
+                // If not Vista, paint background white.
+                catch (DllNotFoundException)
+                {
+                    System.Windows.Application.Current.MainWindow.Background = SystemColors.ControlBrush;
+                }
             }
         }
     }
