@@ -19,10 +19,15 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <ManifestCertificateThumbprint>0A825BB9299538AE263B07E1D97695F90E79CECC</ManifestCertificateThumbprint>
+    <ManifestKeyFile>WpfKlip_TemporaryKey.pfx</ManifestKeyFile>
+    <GenerateManifests>true</GenerateManifests>
+    <SignManifests>true</SignManifests>
+    <ApplicationIcon>klipper.ico</ApplicationIcon>
+    <PublishUrl>ftp://trickster.1gb.ru/http/wpfklip/</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
+    <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
@@ -30,14 +35,16 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://dead-trickster.com/wpfklip/</InstallUrl>
     <SupportUrl>http://dead-trickster.com/wpfklip.aspx</SupportUrl>
     <ErrorReportUrl>http://dead-trickster.com/wpfklip.aspx</ErrorReportUrl>
     <ProductName>WpfKlip</ProductName>
-    <PublisherName>Ilya Khaprov</PublisherName>
-    <ApplicationRevision>31</ApplicationRevision>
-    <ApplicationVersion>0.8.6.%2a</ApplicationVersion>
+    <PublisherName>dead-trickster.com</PublisherName>
+    <ApplicationRevision>35</ApplicationRevision>
+    <ApplicationVersion>0.8.7.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -192,6 +199,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\empty_1687_128.png" />
+    <None Include="WpfKlip_TemporaryKey.pfx" />
     <Resource Include="klipper.jpg" />
     <Resource Include="klipper.png" />
   </ItemGroup>

@@ -122,7 +122,7 @@ namespace WpfKlip
 
             var mainWindowPtr = new WindowInteropHelper(this).Handle;
 
-            int style = User32.GetWindowLongPtr(mainWindowPtr, (int)WpfKlip.Core.Win.Enums.GWLIndex.GWL_STYLE).ToInt32();
+            int style = User32.GetWindowLong(mainWindowPtr, (int)WpfKlip.Core.Win.Enums.GWLIndex.GWL_STYLE);
 
             style = style & ~(int)WpfKlip.Core.Win.Enums.WindowStyle.WS_MINIMIZEBOX;
             style = style & ~(int)WpfKlip.Core.Win.Enums.WindowStyle.WS_MAXIMIZEBOX;

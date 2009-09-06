@@ -126,7 +126,7 @@ namespace WpfKlip.Core
                 var ItemsBox = mainWindow.ItemsBox;
                 if (formats.Contains(DataFormats.Text))
                 {
-                    var text = dataObject.GetData(DataFormats.Text);
+                    var text = Clipboard.GetText();
 
                     if (CheckDuplicates(ItemsBox, (obj) => (text as string) == (obj as string)))
                         return;
