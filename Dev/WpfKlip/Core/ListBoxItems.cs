@@ -12,6 +12,8 @@ using WpfKlip.Core.Win;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Security.Cryptography;
+using System.Windows.Media.Effects;
 
 namespace WpfKlip.Core
 {
@@ -20,12 +22,12 @@ namespace WpfKlip.Core
     delegate void DispatcherInvoke();
     public class MouseCommand
     {
-        public  const int none = 0;
-        public  const int copy = 1;
-        public  const int paste = 2;
-        public  const int remove = 3;
+        public const int none = 0;
+        public const int copy = 1;
+        public const int paste = 2;
+        public const int remove = 3;
 
-        
+
         public static int GetCommandForClick(ClickType click)
         {
             int command = MouseCommand.none;
@@ -54,6 +56,9 @@ namespace WpfKlip.Core
 
     internal abstract class DataEnabledListBoxItem : ListBoxItem
     {
+
+        protected static bool VistaAndAbove = Environment.OSVersion.Version.Major > 5;
+
         protected CapturedItemsListController controller;
 
         protected DataEnabledListBoxItem(CapturedItemsListController controller)
@@ -61,12 +66,23 @@ namespace WpfKlip.Core
             this.controller = controller;
             this.AddHandler(System.Windows.Input.Mouse.MouseDownEvent, new MouseButtonEventHandler(HandleClick), true);
         }
-
         public void Copy()
         {
-            controller.StopClipboard();
+            try
+            {
                 CopyImpl();
-            controller.StartClipboard();
+            }
+            catch
+            {
+                try
+                {
+                    CopyImpl();
+                }
+                catch(COMException/*Exception e*/)
+                {
+                    MessageBox.Show("An error occured while performing clipboard operation (copy)");
+                }
+            }
         }
 
         public abstract void CopyImpl();
@@ -102,9 +118,6 @@ namespace WpfKlip.Core
                 ItemClicked(this, click);
         }
 
-        
-
-
         public void DoMouseCommand(int command)
         {
             switch (command)
@@ -116,7 +129,6 @@ namespace WpfKlip.Core
 
                     User32.SetForegroundWindow(controller.ActiveWindow);
                     Copy();
-                    const int CtrlV = 22;  // ASCII for Ctrl+V.
                     press((int)System.Windows.Forms.Keys.ControlKey);
                     press((int)System.Windows.Forms.Keys.V);
                     release((int)System.Windows.Forms.Keys.V);
@@ -177,13 +189,22 @@ namespace WpfKlip.Core
             }
         }
 
-
         public System.Windows.Controls.Control SettingsPanel
         {
             get { return null; }
         }
 
         public event ItemCopiedEventHandler ItemClicked;
+
+        protected string Title
+        {
+            set
+            {
+                TextBlock l = new TextBlock();
+                l.Text = value;
+                Content = l;
+            }
+        }
     }
 
     internal class TextDataLBI : DataEnabledListBoxItem
@@ -194,12 +215,23 @@ namespace WpfKlip.Core
             get { return text; }
         }
 
-        public TextDataLBI(string text)
+        string rtf;
+        public String Rtf
+        {
+            get { return rtf; }
+        }
+
+        public TextDataLBI(IDataObject dataObject)
             :base(CapturedItemsListController.Instance)
         {
-            this.text = text;
+            this.text = Clipboard.GetText();
 
-            this.Content = CreatePreviewTitleString(text);
+            if (dataObject.GetFormats().Contains(DataFormats.Rtf))
+            {
+                rtf = dataObject.GetData(DataFormats.Rtf) as string;
+            }
+
+            this.Title = CreatePreviewTitleString(text);
             this.Tag = text;
             this.MinHeight = 25;
             this.ToolTip = CreatePreviewBallonString(text);
@@ -208,6 +240,7 @@ namespace WpfKlip.Core
         #region new item processing
         private string CreatePreviewTitleString(string str)
         {
+            str = str.Trim();
             return CreateTitleText(str, str.Length);
         }
 
@@ -289,7 +322,17 @@ namespace WpfKlip.Core
 
         public override void CopyImpl()
         {
-            System.Windows.Clipboard.SetText(text);
+            if (rtf != null)
+            {
+                var dataObject = new DataObject();
+                dataObject.SetData(DataFormats.Rtf, rtf);
+                dataObject.SetText(text);
+                Clipboard.SetDataObject(dataObject);
+            }
+            else
+            {
+                System.Windows.Clipboard.SetText(text);
+            }
         }
     }
 
@@ -302,20 +345,20 @@ namespace WpfKlip.Core
             get { return files; }
             set { files = value; }
         }
-        MyCustomTooltip tooltip;
+        FileTooltip tooltip;
         public FileDropsLBI(string[] files)
             :base(CapturedItemsListController.Instance)
         {
             this.files = files;
 
-            this.Content = CreateTitleString(files);
+            this.Title = CreateTitleString(files);
             this.Tag = files;
             this.MinHeight = 25;
             
 
             MouseLeave += new MouseEventHandler(FileDropsLBI_MouseLeave);
             MouseEnter += new MouseEventHandler(FileDropsLBI_MouseEnter);
-            tooltip = new MyCustomTooltip(files);
+            tooltip = new FileTooltip(files);
             //tooltip.Topmost = true;
             //tooltip.Background = new  LinearGradientBrush(Colors.White, Colors.Gray,90);
 
@@ -324,7 +367,7 @@ namespace WpfKlip.Core
             close_timer.Interval = 200;
 
             open_timer.Elapsed += new System.Timers.ElapsedEventHandler(open_timer_Elapsed);
-            open_timer.Interval = 500;
+            open_timer.Interval = 300;
             //var tooltip = new FileDropFormatToolTip(files);
             //this.ToolTip = tooltip;
             //this.ToolTipClosing += new ToolTipEventHandler(FileDropsLBI_ToolTipClosing);
@@ -430,10 +473,16 @@ namespace WpfKlip.Core
     {
         System.Windows.Media.Imaging.BitmapSource image;
         static int counter = 1;
-        public ImageLBI(System.Windows.Media.Imaging.BitmapSource image)
+        public ImageLBI(System.Drawing.Bitmap bitmap)
             :base(CapturedItemsListController.Instance)
         {
+
+            System.Windows.Media.Imaging.BitmapSource image = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+              bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty,
+              BitmapSizeOptions.FromEmptyOptions());
+
             this.image = image;
+            Tag = new ImageHash(bitmap);
 
             this.MinHeight = 25;
             
@@ -445,7 +494,7 @@ namespace WpfKlip.Core
 
             this.ToolTip = new Image { Source = image, Width = width, Height = height };
 
-            this.Content = "IMAGE #" + counter++ + " (" + controller.ActiveProcess.ProcessName + ")";
+            this.Title = "IMAGE #" + counter++ + " (" + controller.ActiveProcess.ProcessName + ")";
         }
 
         private static void Scale(ref double width, ref double height, int scale_to)
@@ -469,7 +518,7 @@ namespace WpfKlip.Core
 
         public override void CopyImpl()
         {
-            System.Windows.Clipboard.SetImage((BitmapSource)image);
+            System.Windows.Forms.Clipboard.SetImage((Tag as ImageHash).Image);
         }
     }
 }

@@ -41,6 +41,7 @@ using System.Windows.Interop;
 using System.Diagnostics;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Effects;
 
 namespace WpfKlip.Core
 {
@@ -114,97 +115,105 @@ namespace WpfKlip.Core
 
         void ch_ClipboardGrabbed(System.Windows.Forms.IDataObject dataObject)
         {
-            IntPtr id;
-             User32.GetWindowThreadProcessId(activeWindow, out id);
-             activeProcess = Process.GetProcessById(id.ToInt32());
-
-            if (ExclusionslistController.Accept(activeWindow))
+            try
             {
+                IntPtr id;
+                User32.GetWindowThreadProcessId(activeWindow, out id);
+                activeProcess = Process.GetProcessById(id.ToInt32());
 
-                var formats = dataObject.GetFormats();
-                DataEnabledListBoxItem n = null;
-                var ItemsBox = mainWindow.ItemsBox;
-                if (formats.Contains(DataFormats.Text))
+                if (ExclusionslistController.Accept(activeWindow))
                 {
-                    var text = dataObject.GetData(DataFormats.Text);
 
-                    if (CheckDuplicates(ItemsBox, (obj) => (text as string) == (obj as string)))
-                        return;
-
-                    n = new TextDataLBI(text as string);
-                }
-                else if (formats.Contains(DataFormats.FileDrop))
-                {
-                    var files = dataObject.GetData(DataFormats.FileDrop) as string[];
-
-                    if (CheckDuplicates(ItemsBox, (obj) =>
+                    var formats = dataObject.GetFormats();
+                    DataEnabledListBoxItem n = null;
+                    var ItemsBox = mainWindow.ItemsBox;
+                    if (formats.Contains(DataFormats.Text))
                     {
-                        string[] objasfiles = obj as string[];
+                        var text = Clipboard.GetText();
 
-                        if (objasfiles != null && objasfiles.Length == files.Length)
+                        if (Settings.Default.OmitEmptyStrings && String.IsNullOrEmpty(text))
                         {
+                            return;
+                        }
 
-                            // we need this since order may nto be preserved
-                            // e.g. when user selects file from l-to-r and 
-                            // and then r-to-l
-                            for (int i = 0; i < objasfiles.Length; i++)
+                        if (Settings.Default.OmitWhitespacesOnlyString && String.IsNullOrEmpty(text.Trim()))
+                        {
+                            return;
+                        }
+
+                        if (CheckDuplicates(ItemsBox, (obj) => (text as string) == (obj as string)))
+                            return;
+
+                        n = new TextDataLBI(dataObject);
+                    }
+                    else if (formats.Contains(DataFormats.FileDrop))
+                    {
+                        var files = dataObject.GetData(DataFormats.FileDrop) as string[];
+
+                        if (CheckDuplicates(ItemsBox, (obj) =>
+                        {
+                            string[] objasfiles = obj as string[];
+
+                            if (objasfiles != null && objasfiles.Length == files.Length)
                             {
-                                if (!files.Contains(objasfiles[i]))
-                                    return false;
+
+                                // we need this since order may nto be preserved
+                                // e.g. when user selects file from l-to-r and 
+                                // and then r-to-l
+                                for (int i = 0; i < objasfiles.Length; i++)
+                                {
+                                    if (!files.Contains(objasfiles[i]))
+                                        return false;
+                                }
+
+                                return true;
+                            }
+                            return false;
+                        }))
+                            return;
+
+                        n = new FileDropsLBI(files);
+                    }
+                    else if (System.Windows.Clipboard.ContainsImage())
+                    {
+
+                        System.Windows.Forms.IDataObject clipboardData = System.Windows.Forms.Clipboard.GetDataObject();
+                        System.Drawing.Bitmap bitmap = (System.Drawing.Bitmap)clipboardData.GetData(
+                           System.Windows.Forms.DataFormats.Bitmap);
+
+                        if (CheckDuplicates(ItemsBox, (obj) =>
+                        {
+                            var taghash = obj as ImageHash;
+                            if (taghash == null)
+                            {
+                                return false;
                             }
 
-                            return true;
-                        }
-                        return false;
-                    }))
-                        return;
+                            else return ImageHash.Compare(taghash, new ImageHash(bitmap)) == ImageHash.CompareResult.ciCompareOk;
+                        }))
+                            return;
 
-                    n = new FileDropsLBI(files);
-                }
-                else if (System.Windows.Clipboard.ContainsImage())
-                {
-                    System.Windows.Media.Imaging.BitmapSource image = GetBitmapSourceFromClipboard();
+                        n = new ImageLBI(bitmap);
+                    }
 
-                    if (CheckDuplicates(ItemsBox, (obj) =>
+                    if (n != null)
                     {
-                        System.Windows.Media.Imaging.BitmapSource image1 = obj as System.Windows.Media.Imaging.BitmapSource;
-                        if (image1 == null)
-                        {
-                            return false;
-                        }
+                        ItemsBox.Items.Insert(0, n);
+                        n.ItemClicked += new ItemCopiedEventHandler(n_ItemClicked);
+                    }
 
-                        else return image1 == image;
-                    }))
-                        return;
+                    /* Console.WriteLine("\r\n\r\n");
 
-                    n = new ImageLBI(image);
+                     for (int i = 0; i < ItemsBox.Items.Count; i++)
+                     {
+                         Console.WriteLine("{0}:{1}", i, (ItemsBox.Items[i] as ListBoxItem).Tag);
+                     }*/
                 }
-
-                if (n != null)
-                {
-                    ItemsBox.Items.Insert(0, n);
-                    n.ItemClicked += new ItemCopiedEventHandler(n_ItemClicked);
-                }
-
-                /* Console.WriteLine("\r\n\r\n");
-
-                 for (int i = 0; i < ItemsBox.Items.Count; i++)
-                 {
-                     Console.WriteLine("{0}:{1}", i, (ItemsBox.Items[i] as ListBoxItem).Tag);
-                 }*/
             }
-        }
-
-        private static BitmapSource GetBitmapSourceFromClipboard()
-        {
-            System.Windows.Forms.IDataObject clipboardData =
-               System.Windows.Forms.Clipboard.GetDataObject();
-            System.Drawing.Bitmap bitmap =
-               (System.Drawing.Bitmap)clipboardData.GetData(
-               System.Windows.Forms.DataFormats.Bitmap);
-            return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-              bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty,
-              BitmapSizeOptions.FromEmptyOptions());
+            catch (COMException)
+            {
+                MessageBox.Show("An error occured while performing clipboard operation (read)");
+            }
         }
 
         private static bool CheckDuplicates(ListBox ItemsBox, LambdaComparer comparer)
@@ -243,7 +252,7 @@ namespace WpfKlip.Core
         {
             if (id == 666)
             {
-                ToogleVisibility();
+                mainWindow.ToogleVisibility();
                 return;
             }
 
@@ -254,20 +263,6 @@ namespace WpfKlip.Core
                 (mainWindow.ItemsBox.Items[itemindex] as DataEnabledListBoxItem).DoMouseCommand(MouseCommand.GetCommandForClick((ClickType)Settings.Default.ItemHotkeyActAs));
             }
 
-        }
-
-        private void ToogleVisibility()
-        {
-            switch (mainWindow.Visibility)
-            {
-                case Visibility.Hidden:
-                    mainWindow.SetVisible();
-                    break;
-                case Visibility.Visible:
-                    mainWindow.Visibility = Visibility.Hidden;
-                    SettingsWindow.Singleton.Visibility = Visibility.Hidden;
-                    break;
-            }
         }
 
         internal void ClearList()

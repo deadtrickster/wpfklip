@@ -11,6 +11,8 @@ using System.Windows.Media.Imaging;
 
 namespace WpfKlip.Core.Win
 {
+
+    using Bitmap = System.Drawing.Bitmap;
     /// <summary>
     /// Summary description for ShellIcon.  Get a small or large Icon with an easy C# function call
     /// that returns a 32x32 or 16x16 System.Drawing.Icon depending on which function you call
