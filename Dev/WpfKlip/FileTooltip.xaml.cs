@@ -18,13 +18,15 @@ using System.Threading;
 
 namespace WpfKlip
 {
+
+    using Bitmap = System.Drawing.Bitmap;
     /// <summary>
     /// Interaction logic for MyCustomTooltip.xaml
     /// </summary>
-    public partial class MyCustomTooltip : Popup
+    public partial class FileTooltip : Popup
     {
         string[] files;
-        public MyCustomTooltip(string[] files)
+        public FileTooltip(string[] files)
         {
             #region control related
             InitializeComponent();
@@ -48,7 +50,7 @@ namespace WpfKlip
             #endregion
 
             this.files = files;
-           PreapreFilesInfo();// Thread thr = new Thread(PreapreFilesInfo);
+           // Thread thr = new Thread(PreapreFilesInfo);
 
             //thr.Start();
             if (instance != null)
@@ -58,6 +60,7 @@ namespace WpfKlip
             }
 
             this.Opened += new EventHandler(MyCustomTooltip_Opened);
+            
             instance = this;
         }
 
@@ -69,11 +72,15 @@ namespace WpfKlip
                 instance.close_timer.Enabled = false;
             }
             instance = this;
-
+            Focus();
+            if (Fileslist.ItemsSource == null)
+            {
+                PreapreFilesInfo();
+            }
             Fileslist.Focus();
         }
 
-        static MyCustomTooltip instance;
+        static FileTooltip instance;
 
         #region control related
         bool inBusiness;
@@ -119,7 +126,7 @@ namespace WpfKlip
 
             foreach (var file_path in files)
             {
-                if (File.Exists(file_path))
+                if (File.Exists(file_path) || Directory.Exists(file_path))
                 {
                     ret.Add(new _FileInfo(file_path));
                 }
@@ -141,9 +148,10 @@ namespace WpfKlip
 
             if (image == null)
             {
-                return ((ImageSource)new FileToIconConverter().GetImage(path, 128));
+                ///return ((ImageSource)new FileToIconConverter().GetImage(path, 128));
+                ///
+                image = ShellIcon.GetVistaIcon(path).ToBitmap();
             }
-
             return image.ToWpfBitmap();
         }
 

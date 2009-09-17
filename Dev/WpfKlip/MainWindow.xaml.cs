@@ -58,8 +58,18 @@ namespace WpfKlip
             CommandBindings.AddRange(Commands.CommandBindings);
             if (Environment.OSVersion.Version.Major > 5)
             {
-                SettingsButton.ContextMenu = null; 
+                SettingsButton.ContextMenu = null;
             }
+            else
+            {
+                Settings.Default.EnableGlassEffect = false;
+            }
+            if (!Settings.Default.EnableGlassEffect)
+            {
+                ItemsBox.Margin = new Thickness(3, 0, 3, 0);
+            }
+
+            
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -89,6 +99,19 @@ namespace WpfKlip
             {
                 ShowHideTrayIcon();
             }
+            else if (e.PropertyName == "EnableGlassEffect")
+            {
+                if (Settings.Default.EnableGlassEffect)
+                {
+                    DWMFrameExtender.FullGlass(this);
+                    ItemsBox.Margin = new Thickness(0);
+                }
+                else
+                {
+                    DWMFrameExtender.RemoveGlass(this);
+                    ItemsBox.Margin = new Thickness(3,0,3,0);
+                }
+            }
         }
 
         private void ShowHideTrayIcon()
@@ -102,7 +125,7 @@ namespace WpfKlip
                     ni.DoubleClick +=
                         delegate(object sender, EventArgs args)
                         {
-                            SetVisible();
+                            ToogleVisibility();
                         };
                 }
 
@@ -122,7 +145,7 @@ namespace WpfKlip
 
             var mainWindowPtr = new WindowInteropHelper(this).Handle;
 
-            int style = User32.GetWindowLong(mainWindowPtr, WpfKlip.Core.Win.Enums.GWLIndex.GWL_STYLE);
+            int style = User32.GetWindowLong(mainWindowPtr, (int)WpfKlip.Core.Win.Enums.GWLIndex.GWL_STYLE);
 
             style = style & ~(int)WpfKlip.Core.Win.Enums.WindowStyle.WS_MINIMIZEBOX;
             style = style & ~(int)WpfKlip.Core.Win.Enums.WindowStyle.WS_MAXIMIZEBOX;
@@ -136,13 +159,31 @@ namespace WpfKlip
 
         void MainWindow_Activated(object sender, EventArgs e)
         {
-            DWMFrameExtender.FullGlass(this);
+            ItemsBox.Focus();
+            if (Settings.Default.EnableGlassEffect)
+            {
+                DWMFrameExtender.FullGlass(this);
+            }
         }
 
         void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
                 this.DragMove();
+        }
+
+        public void ToogleVisibility()
+        {
+            switch (Visibility)
+            {
+                case Visibility.Hidden:
+                    SetVisible();
+                    break;
+                case Visibility.Visible:
+                    Visibility = Visibility.Hidden;
+                    SettingsWindow.Singleton.Visibility = Visibility.Hidden;
+                    break;
+            }
         }
 
         public void SetVisible()
@@ -166,7 +207,20 @@ namespace WpfKlip
 
             this.Top = top;
             this.Left = left;
+
             Visibility = Visibility.Visible;
+
+            if (WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Normal;
+            }
+            //UIElement elementWithFocus = Keyboard.FocusedElement as UIElement;
+            //while (elementWithFocus!= null && ItemsBox != elementWithFocus)
+            //{
+            //    elementWithFocus.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            //    elementWithFocus = Keyboard.FocusedElement as UIElement;
+            //}
+            ItemsBox.Focus();
         }
 
         private void Label_MouseDown(object sender, MouseButtonEventArgs e)

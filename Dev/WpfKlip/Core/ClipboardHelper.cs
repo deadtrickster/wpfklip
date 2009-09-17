@@ -158,7 +158,7 @@ namespace WpfKlip.Core
                         ClipboardTextGrabbed(str);
                     }
                 }
-                else if(System.Windows.Forms.Clipboard.ContainsData(DataFormats.FileDrop))
+                else if (System.Windows.Forms.Clipboard.ContainsData(DataFormats.FileDrop))
                 {
                     var pathes = (string[])System.Windows.Forms.Clipboard.GetDataObject().GetData(DataFormats.FileDrop);
 
@@ -170,12 +170,14 @@ namespace WpfKlip.Core
 
                 if (ClipboardGrabbed != null)
                     ClipboardGrabbed(Clipboard.GetDataObject());
-
-                m_bCallingSetClipboardViewer = false;
             }
             catch (COMException)
             {
                 System.Windows.Forms.MessageBox.Show("Unable to retrive text from clipboard: COM exception :-(.");
+            }
+            finally
+            {
+                m_bCallingSetClipboardViewer = false;
             }
         }
 

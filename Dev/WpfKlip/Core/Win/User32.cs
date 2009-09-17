@@ -217,6 +217,9 @@ namespace WpfKlip.Core.Win
          DllImport("user32.dll", SetLastError = true)]
         public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex);
+
         [Obsolete("This function is unsafe. Use GetWindowLongPtr instead."),
          DllImport("user32.dll", SetLastError = true)]
         public static extern int GetWindowLong(IntPtr hWnd, GWLIndex nIndex);
