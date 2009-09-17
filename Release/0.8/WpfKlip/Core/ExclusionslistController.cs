@@ -15,6 +15,7 @@ namespace WpfKlip.Core
 {
     class ExclusionslistController
     {
+        private static string  _CurrentProcessFileName = Process.GetCurrentProcess().MainModule.FileName;
         public static IEnumerable ItemsSource
         {
             get {
@@ -44,14 +45,17 @@ namespace WpfKlip.Core
             IEqualityComparer<Process> comparer = new DistinctHelper();
             for (int i = 0; i < processes.Length; i++)
             {
-                if (processes[i] == currentProcess)
-                    continue;
                 try
                 {
+                    if (processes[i].MainModule.FileName == _CurrentProcessFileName)
+                        continue;
+
                     var exist = ret.FirstOrDefault(dp => dp.ExecutablePath == processes[i].MainModule.FileName);
                     if (exist == null)
                     {
-                        distinctImages.Add(processes[i]);
+
+                        if (distinctImages.FirstOrDefault(p => p.MainModule.FileName == processes[i].MainModule.FileName) == null)
+                            distinctImages.Add(processes[i]);
                     }
                     else
                     {

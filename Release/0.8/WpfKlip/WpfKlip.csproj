@@ -127,8 +127,8 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MyCustomTooltip.xaml.cs">
-      <DependentUpon>MyCustomTooltip.xaml</DependentUpon>
+    <Compile Include="FileTooltip.xaml.cs">
+      <DependentUpon>FileTooltip.xaml</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -174,7 +174,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MyCustomTooltip.xaml">
+    <Page Include="FileTooltip.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

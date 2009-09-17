@@ -81,5 +81,48 @@ namespace WpfKlip.Core
                 }
             }
         }
+
+        internal static void RemoveGlass(MainWindow w)
+        {
+            if (Environment.OSVersion.Version.Major > 5)
+            {
+                var mainWindowPtr = new WindowInteropHelper(w).Handle;
+                try
+                {
+                    System.Windows.Application.Current.MainWindow.Background = new SolidColorBrush(Colors.Transparent);
+
+                    HwndSource mainWindowSrc = HwndSource.FromHwnd(mainWindowPtr);
+                    mainWindowSrc.CompositionTarget.BackgroundColor = Colors.White;
+
+                    // Get System Dpi
+                    System.Drawing.Graphics desktop = System.Drawing.Graphics.FromHwnd(mainWindowPtr);
+                    float DesktopDpiX = desktop.DpiX;
+                    float DesktopDpiY = desktop.DpiY;
+
+                    // Set Margins
+                    MARGINS margins = new MARGINS();
+
+                    // Extend glass frame into client area
+                    // Note that the default desktop Dpi is 96dpi. The  margins are
+                    // adjusted for the system Dpi.
+                    margins.cxLeftWidth = 0;
+                    margins.cxRightWidth = 0;
+                    margins.cyTopHeight =0;
+                    margins.cyBottomHeight = 0;
+
+                    int hr = DwmApi.DwmExtendFrameIntoClientArea(mainWindowSrc.Handle, ref margins);
+                    //
+                    if (hr < 0)
+                    {
+                        //DwmExtendFrameIntoClientArea Failed
+                    }
+                }
+                // If not Vista, paint background white.
+                catch (DllNotFoundException)
+                {
+                    System.Windows.Application.Current.MainWindow.Background = SystemColors.ControlBrush;
+                }
+            }
+        }
     }
 }
