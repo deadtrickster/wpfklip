@@ -8,6 +8,8 @@ using System.IO;
 
 namespace WpfKlip.Core.Win
 {
+
+    using Bitmap = System.Drawing.Bitmap;
     /// <summary>
     /// Summary description for ThumbnailCreator.
     /// http://www.vbaccelerator.com/home/net/code/libraries/shell_projects/Thumbnail_Extraction/article.asp

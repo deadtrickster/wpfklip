@@ -66,6 +66,8 @@
                     <CheckBox IsChecked="{Binding Path=startup, Mode=TwoWay}" Margin="0,14,39,0" x:Name="Autoruncheck" Grid.Column="2" Height="16" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Right" Width="13.453" />
                     <Label Grid.Row="3"  Margin="2,0,22,6" Content="Show tray icon" Height="30" VerticalAlignment="Bottom"></Label>
                     <CheckBox Grid.Row="3" IsChecked="{Binding Path=ShowTrayIcon, Mode=TwoWay}" Margin="0,0,10,16"  Height="13" VerticalAlignment="Bottom" Width="13" HorizontalAlignment="Right" />
+                    <Label ToolTip="For Post-XP systems" Grid.Row="3" Grid.Column="1" Content="Enable Aero glass effect" Margin="29,0,58,6" Grid.ColumnSpan="2" Visibility="Visible" Height="30" VerticalAlignment="Bottom" />
+                    <CheckBox x:Name="AeroSwitcher" ToolTip="For Post-XP systems" Grid.Row="3" Grid.Column="2" IsChecked="{Binding Path=EnableGlassEffect}" Height="23" VerticalAlignment="Bottom" Margin="0,0,19.363,6" HorizontalAlignment="Right" Width="33.09" Visibility="Visible"></CheckBox>
                 </Grid>
             </TabItem>
             <TabItem>

@@ -53,6 +53,13 @@ namespace WpfKlip
 
             Closing += new System.ComponentModel.CancelEventHandler(Optional_Closing);
             Application.Current.Exit+=new ExitEventHandler(Current_Exit);
+
+            if (Environment.OSVersion.Version.Major < 6)
+            {
+                AeroSwitcher.IsEnabled = false;
+
+                AeroSwitcher.ToolTip = "Sorry this option only for Vista and above Windows users";
+            }
         }
         bool cclose = true;
         void Current_Exit(object sender, ExitEventArgs e)

@@ -12,9 +12,10 @@ using System.Windows.Threading;
 using System.Runtime.InteropServices;
 using System.Windows.Data;
 using System.Windows.Media;
-
 namespace WpfKlip.Core.Win
 {
+
+    using Bitmap = System.Drawing.Bitmap;
     //http://www.codeproject.com/KB/WPF/filetoiconconverter.aspx?display=PrintAll
 
     [ValueConversion(typeof(string), typeof(ImageSource))]
