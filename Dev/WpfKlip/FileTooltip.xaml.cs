@@ -50,9 +50,9 @@ namespace WpfKlip
             #endregion
 
             this.files = files;
-           // Thread thr = new Thread(PreapreFilesInfo);
+           Thread thr = new Thread(PreapreFilesInfo);
 
-            //thr.Start();
+            thr.Start();
             if (instance != null)
             {
                 instance.IsOpen = false;
@@ -60,7 +60,7 @@ namespace WpfKlip
             }
 
             this.Opened += new EventHandler(MyCustomTooltip_Opened);
-            
+
             instance = this;
         }
 
@@ -73,10 +73,6 @@ namespace WpfKlip
             }
             instance = this;
             Focus();
-            if (Fileslist.ItemsSource == null)
-            {
-                PreapreFilesInfo();
-            }
             Fileslist.Focus();
         }
 
@@ -163,6 +159,7 @@ namespace WpfKlip
                 Path = path;
 
                 Thumb = getThumb(path);
+                Thumb.Freeze();
             }
 
             public string Name

@@ -1,6 +1,6 @@
 ﻿#region License block
 /*
-Copyright (c) 2009 Khaprov Ilja (http://dead-trickster.com)
+Copyright (c) 2009 Khaprov Ilya (http://dead-trickster.com)
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
 files (the "Software"), to deal in the Software without
@@ -144,7 +144,7 @@ namespace WpfKlip.Core
                         if (CheckDuplicates(ItemsBox, (obj) => (text as string) == (obj as string)))
                             return;
 
-                        n = new TextDataLBI(dataObject);
+                        n = new TextDataLBI(Clipboard.GetDataObject());
                     }
                     else if (formats.Contains(DataFormats.FileDrop))
                     {
