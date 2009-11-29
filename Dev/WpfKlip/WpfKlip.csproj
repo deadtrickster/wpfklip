@@ -121,9 +121,6 @@
     <Compile Include="ExclusionsList.xaml.cs">
       <DependentUpon>ExclusionsList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ImageTooltip.xaml.cs">
-      <DependentUpon>ImageTooltip.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -163,10 +160,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="ExclusionsList.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ImageTooltip.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -83,7 +83,7 @@
                 <Grid >
                     <Label Content="To Roger..."/>
                     <Image Margin="26,45,0,83" x:Name="image1" Stretch="Fill" Source="/WPFKlip;component/klipper.png" Width="128" HorizontalAlignment="Left" />
-                    <Label Height="28" Margin="0,58,23,0" x:Name="label9" VerticalAlignment="Top" HorizontalAlignment="Right" Width="157" Content="2008 - 2009 (c) Ilja Khaprov"/>
+                    <Label Height="28" Margin="0,58,23,0" x:Name="label9" VerticalAlignment="Top" HorizontalAlignment="Right" Width="157" Content="2008 - 2009 (c) Ilya Khaprov"/>
                     <Label Margin="0,92,36,0" x:Name="label10" Height="28" VerticalAlignment="Top" Foreground="Blue" Cursor="Hand" HorizontalAlignment="Right" Width="120" Content="dead-trickster.com"/>
                     <Label Height="25" Margin="21,0,170.29,17" x:Name="label11" VerticalAlignment="Bottom" Foreground="Blue" Cursor="Hand"  Content="http://12m3.deviantart.com/"/>
                     <Label Height="28" Margin="21,0,163,40" x:Name="label12" VerticalAlignment="Bottom" Content="Klipper icon from Umut Pulat"/>

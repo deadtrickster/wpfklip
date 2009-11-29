@@ -201,6 +201,7 @@ namespace WpfKlip.Core
             set
             {
                 TextBlock l = new TextBlock();
+                l.TextWrapping = TextWrapping.NoWrap;
                 l.Text = value;
                 Content = l;
             }
