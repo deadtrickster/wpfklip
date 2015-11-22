@@ -1,0 +1,33 @@
+﻿<Popup x:Class="WpfKlip.FileTooltip"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:core="clr-namespace:WpfKlip.Core"
+    PopupAnimation="Fade"  AllowsTransparency="True" Margin="1,1,1,1" Placement="MousePoint" MaxHeight="200" MaxWidth="200">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <!--<ColumnDefinition Width="*"></ColumnDefinition>-->
+        </Grid.ColumnDefinitions>
+        <Label Background="White" x:Name="preparingLabel">Preparing previews</Label>
+        <ListBox Grid.Row="0" x:Name="Fileslist" FontFamily="Courier New" Visibility="Collapsed">
+            <!--<ListBox.ContextMenu>
+                <ContextMenu >
+                    <ContextMenu.Items>
+
+                </ContextMenu>
+            </ListBox.ContextMenu>-->
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid  HorizontalAlignment="Stretch" Margin ="2" Width="150">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+                        <Image Source="{Binding Path=Thumb}" Width="{Binding Path=Thumb.Width}" Height="{Binding Path=Thumb.Height}" HorizontalAlignment="Center" ToolTip="{Binding Path=ToolTipInfo}"></Image>
+                        <Label MaxWidth="140" HorizontalAlignment="Stretch"  Grid.Row="1" Content="{Binding Path=Name}" ToolTip="{Binding Path=ToolTipInfo}" Margin="5,3,5,0" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center"></Label>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Popup>

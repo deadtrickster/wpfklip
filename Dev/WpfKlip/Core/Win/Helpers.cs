@@ -1,6 +1,6 @@
 ﻿#region License block
 /*
-Copyright (c) 2009 Khaprov Ilya (http://dead-trickster.com)
+Copyright (c) 2009,2015 Ilya Khaprov <ilya.khaprov@publitechs.com>
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
 files (the "Software"), to deal in the Software without

@@ -1,0 +1,94 @@
+﻿<Window x:Class="WpfKlip.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Settings" Height="304" Width="450" WindowStyle="ToolWindow" ResizeMode="NoResize" ShowInTaskbar="False" Icon="/WpfKlip;component/klipper.png" Topmost="True" xmlns:WpfKlip_Properties="clr-namespace:WpfKlip.Properties" xmlns:my="clr-namespace:WpfKlip">
+    <Grid>
+        <TabControl  x:Name="tabControl1" TabStripPlacement="Left">
+            <TabItem x:Name="SettingsTabItem" DataContext="{x:Static WpfKlip_Properties:Settings.Default}">
+                <TabItem.Header>
+                    <Label Height="27" Content="Settings" />
+                </TabItem.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="33*" />
+                        <ColumnDefinition Width="33*" />
+                        <ColumnDefinition Width="33*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" MinHeight="46" />
+                        <RowDefinition Height="28*" />
+                        <RowDefinition Height="99*" />
+                        <RowDefinition Height="83*"  />
+                    </Grid.RowDefinitions>
+                    <Label Margin="2,10,0,10" x:Name="label1" Content="Visibility hotkey:"/>
+                    <TextBox Grid.ColumnSpan="2" Margin="103,12,81,11" x:Name="textBox1" Text="%^+Z" IsEnabled="False" />
+                    <ComboBox Grid.Column="2" Margin="35,10,10,13" x:Name="comboBox1" Height="23" SelectedIndex="{Binding Path=ItemHotkeyActAs, Mode=TwoWay}">
+                        <Label Content="Left"/>
+                        <Label Content="Middle"/>
+                        <Label Content="Right"/>
+                    </ComboBox>
+                    <Label Grid.ColumnSpan="2" Margin="42,10,77,4" x:Name="label14" Grid.Column="1" Content="Item hotkey act as"/>
+                    <Label Grid.Row="1" Margin="2,0,72,1.96" x:Name="label2" Content="History item mouse event..." Grid.ColumnSpan="2" />
+                    <Label Grid.Row="2" Height="25.96" Margin="2,4,10,0" x:Name="label3" VerticalAlignment="Top" Content="On Left Click:"/>
+                    <Label Grid.Column="1" Grid.Row="2" Height="25.96" Margin="2,4,2.907,0" x:Name="label4" VerticalAlignment="Top" Content="On Mid Click:"/>
+                    <Label Grid.Column="2" Grid.Row="2" Height="25.96" Margin="2,4,-1,0" x:Name="label5" VerticalAlignment="Top" Content="On Right Click:"/>
+                    <ComboBox Grid.Row="2" Margin="6,36,10,40" x:Name="comboBox2" Height="23" SelectedIndex="{Binding Path=Click, Mode=TwoWay}">
+                        <Label Content="None"/>
+                        <Label Content="Copy"/>
+                        <Label Content="Paste"/>
+                        <Label Content="Remove"/>
+                    </ComboBox>
+                    <ComboBox Margin="6,36,10,40" x:Name="comboBox3" Grid.Column="1" Grid.Row="2" Height="23" SelectedIndex="{Binding Path=MidClick, Mode=TwoWay}">
+                        <Label Content="None"/>
+                        <Label Content="Copy"/>
+                        <Label Content="Paste"/>
+                        <Label Content="Remove"/>
+                    </ComboBox>
+                    <ComboBox Margin="6,36,10,40" x:Name="comboBox4" Grid.Column="2" Grid.Row="2" Height="23" SelectedIndex="{Binding Path=RightClick, Mode=TwoWay}">
+                        <Label Content="None"/>
+                        <Label Content="Copy"/>
+                        <Label Content="Paste"/>
+                        <Label Content="Remove"/>
+                    </ComboBox>
+                    <CheckBox Grid.Row="2" Margin="6,73,29,75" x:Name="checkBox1" Grid.RowSpan="2" IsChecked="{Binding Path=ClickHide, Mode=TwoWay}" Content="Hide after"/>
+                    <CheckBox Margin="10.773,73,24.227,75" x:Name="checkBox2" Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" IsChecked="{Binding Path=MidClickHide, Mode=TwoWay}" Content="Hide after"/>
+                    <CheckBox Margin="6,73,29,75" x:Name="checkBox3" Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" IsChecked="{Binding Path=RightClickHide, Mode=TwoWay}" Content="Hide after"/>
+                    <Label Margin="2,7.04,0,0" x:Name="label7" Height="25.96" VerticalAlignment="Top" Grid.Row="3" HorizontalAlignment="Left" Width="86.453" Content="Revert hide if"/>
+                    <Label Margin="50,4.04,0,0" x:Name="label8" Grid.Column="1" Height="25.96" Grid.Row="3" VerticalAlignment="Top" Content="holded"/>
+                    <ComboBox  Grid.ColumnSpan="2" Grid.Row="3" Height="23" Margin="90,7,72,0" x:Name="RevertHideSetting" VerticalAlignment="Top" SelectedIndex="{Binding Path=RevertHide, Mode=TwoWay}" >
+                        <Label Content="None"/>
+                        <Label Content="Alt"/>
+                        <Label Content="Shift"/>
+                        <Label Content="Control"/>
+                        <Label Content="System"/>
+                    </ComboBox>
+                    <Label Margin="6,7,47.546,0" x:Name="label13" Grid.Column="2" Height="24" Grid.Row="3" VerticalAlignment="Top" Content="Autorun"/>
+                    <CheckBox IsChecked="{Binding Path=startup, Mode=TwoWay}" Margin="0,14,39,0" x:Name="Autoruncheck" Grid.Column="2" Height="16" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Right" Width="13.453" />
+                    <Label Grid.Row="3"  Margin="2,0,22,6" Content="Show tray icon" Height="30" VerticalAlignment="Bottom"></Label>
+                    <CheckBox Grid.Row="3" IsChecked="{Binding Path=ShowTrayIcon, Mode=TwoWay}" Margin="0,0,10,16"  Height="13" VerticalAlignment="Bottom" Width="13" HorizontalAlignment="Right" />
+                    <Label ToolTip="For Post-XP systems" Grid.Row="3" Grid.Column="1" Content="Enable Aero glass effect" Margin="29,0,58,6" Grid.ColumnSpan="2" Visibility="Visible" Height="30" VerticalAlignment="Bottom" />
+                    <CheckBox x:Name="AeroSwitcher" ToolTip="For Post-XP systems" Grid.Row="3" Grid.Column="2" IsChecked="{Binding Path=EnableGlassEffect}" Height="23" VerticalAlignment="Bottom" Margin="0,0,19.363,6" HorizontalAlignment="Right" Width="33.09" Visibility="Visible"></CheckBox>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                  <Label Height="27" Content="Exclusions" />
+                </TabItem.Header>
+                <my:ExclusionsList  x:Name="exclusionsList1" />
+            </TabItem>
+            <TabItem x:Name="AboutTabItem">
+                <TabItem.Header>
+                    <Label Height="27" Content="About" />
+                </TabItem.Header>
+                <Grid >
+                    <Label Content="To Roger..."/>
+                    <Image Margin="26,45,0,83" x:Name="image1" Stretch="Fill" Source="/WPFKlip;component/klipper.png" Width="128" HorizontalAlignment="Left" />
+                    <Label Height="28" Margin="0,58,23,0" x:Name="label9" VerticalAlignment="Top" HorizontalAlignment="Right" Width="157" Content="2008 - 2009 (c) Ilya Khaprov"/>
+                    <Label Margin="0,92,36,0" x:Name="label10" Height="28" VerticalAlignment="Top" Foreground="Blue" Cursor="Hand" HorizontalAlignment="Right" Width="120" Content="dead-trickster.com"/>
+                    <Label Height="25" Margin="21,0,170.29,17" x:Name="label11" VerticalAlignment="Bottom" Foreground="Blue" Cursor="Hand"  Content="http://12m3.deviantart.com/"/>
+                    <Label Height="28" Margin="21,0,163,40" x:Name="label12" VerticalAlignment="Bottom" Content="Klipper icon from Umut Pulat"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
